@@ -4,7 +4,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
 --- ВСТАВЬ СВОИ ДАННЫЕ ТУТ ---
-TOKEN = '8582630303:AAFNxoRd_rhnaPL39MbwtmWM6oq6M7utjbo'
+TOKEN = '8582630303:AAHKku6RbbgSu7SzRid69gMlwTEKTMb7__k'
 ADMIN_ID = 386263154  # Твой ID цифрами
 ------------------------------
 
