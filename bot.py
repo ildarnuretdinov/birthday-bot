@@ -1,11 +1,10 @@
-python
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+import os
 
-TOKEN = '8582630303:AAHKku6RbbgSu7SzRid69gMlwTEKTMb7__k'
-ADMIN_ID = 386263154  # Твой ID цифрами
-------------------------------
+TOKEN = os.getenv("8582630303:AAHKku6RbbgSu7SzRid69gMlwTEKTMb7__k")
+ADMIN_ID = 386263154
 
 logging.basicConfig(level=logging.INFO)
 guests = {}
@@ -37,12 +36,22 @@ async def guests_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text = "📋 Список:\n" + "\n".join(guests.values()) if guests else "Пока пусто"
         await update.message.reply_text(text)
 
-def main():
+async def main():
     app = Application.builder().token(TOKEN).build()
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("guests", guests_list))
     app.add_handler(CallbackQueryHandler(button))
-    app.run_polling()
+
+    # Webhook mode
+    port = int(os.environ.get("PORT", 8443))
+    await app.run_webhook(
+        listen="0.0.0.0",
+        port=port,
+        url_path=TOKEN,
+        webhook_url=f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}/{TOKEN}"
+    )
 
 if __name__ == '__main__':
-    main()
+    import asyncio
+    asyncio.run(main())
