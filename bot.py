@@ -42,7 +42,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     status = "✅ Придет" if query.data == 'yes' else "❌ Не придет"
     guests[user.id] = f"{status}: {name}"
     
-    await query.edit_message_text(text=f"Ответ записан: Спасибо!")
+    await query.edit_message_text(text=f"Ответ записан! Спасибо!")
     await context.bot.send_message(chat_id=ADMIN_ID, text=f"🔔 {name} ответил(а): {status}")
 
 async def guests_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
