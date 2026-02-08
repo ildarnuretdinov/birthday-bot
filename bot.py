@@ -3,7 +3,11 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 import os
 
-TOKEN = os.getenv("8582630303:AAHKku6RbbgSu7SzRid69gMlwTEKTMb7__k")
+TOKEN = os.getenv("BOT_TOKEN")
+
+if not TOKEN:
+    raise RuntimeError("BOT_TOKEN не найден. Проверь переменные окружения Render.")
+
 ADMIN_ID = 386263154
 
 logging.basicConfig(level=logging.INFO)
