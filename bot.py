@@ -7,9 +7,8 @@ logging.basicConfig(level=logging.INFO)
 
 TOKEN = os.getenv("BOT_TOKEN")
 
-# 🔥 1. ЗДЕСЬ МЕНЯЕМ: список администраторов
-# Просто добавляй новые ID через запятую
-ADMINS = [386263154, 2032273338]   # ← сюда впиши ID второго человека
+# 🔥 Список администраторов — сюда можно добавлять ID через запятую
+ADMINS = [386263154, 2032273338]
 
 if not TOKEN:
     raise RuntimeError("BOT_TOKEN не найден. Проверь переменные окружения Render.")
@@ -31,6 +30,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Буду рада видеть вас! Придёте?"
     )
 
+    # 🔥 1. Отправляем картинку
+    await update.message.reply_photo(
+        photo="https://i.imgur.com/0V8p6dC.jpeg"  # ← твоя картинка из Imgur
+    )
+
+    # 🔥 2. Отправляем текст + кнопки
     await update.message.reply_text(
         text,
         reply_markup=InlineKeyboardMarkup(keyboard)
@@ -48,7 +53,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await query.edit_message_text(text="Ответ записан! Спасибо!")
 
-    # 🔥 2. ЗДЕСЬ МЕНЯЕМ: отправка уведомлений всем администраторам
+    # 🔥 Отправляем уведомление всем администраторам
     for admin in ADMINS:
         await context.bot.send_message(
             chat_id=admin,
@@ -56,7 +61,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 async def guests_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # 🔥 3. ЗДЕСЬ МЕНЯЕМ: доступ к списку гостей для всех админов
+    # 🔥 Доступ к списку гостей для всех админов
     if update.effective_user.id in ADMINS:
         text = "📋 Список гостей:\n" + "\n".join(guests.values()) if guests else "Пока никто не ответил"
         await update.message.reply_text(text)
