@@ -6,7 +6,10 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 logging.basicConfig(level=logging.INFO)
 
 TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_ID = 386263154
+
+# 🔥 1. ЗДЕСЬ МЕНЯЕМ: список администраторов
+# Просто добавляй новые ID через запятую
+ADMINS = [386263154, 2032273338]   # ← сюда впиши ID второго человека
 
 if not TOKEN:
     raise RuntimeError("BOT_TOKEN не найден. Проверь переменные окружения Render.")
@@ -37,17 +40,25 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     user = query.from_user
+
     name = f"{user.first_name} (@{user.username})" if user.username else user.first_name
-    
     status = "✅ Придет" if query.data == 'yes' else "❌ Не придет"
+
     guests[user.id] = f"{status}: {name}"
-    
-    await query.edit_message_text(text=f"Ответ записан! Спасибо!")
-    await context.bot.send_message(chat_id=ADMIN_ID, text=f"🔔 {name} ответил(а): {status}")
+
+    await query.edit_message_text(text="Ответ записан! Спасибо!")
+
+    # 🔥 2. ЗДЕСЬ МЕНЯЕМ: отправка уведомлений всем администраторам
+    for admin in ADMINS:
+        await context.bot.send_message(
+            chat_id=admin,
+            text=f"🔔 {name} ответил(а): {status}"
+        )
 
 async def guests_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id == ADMIN_ID:
-        text = "📋 Список:\n" + "\n".join(guests.values()) if guests else "Пока пусто"
+    # 🔥 3. ЗДЕСЬ МЕНЯЕМ: доступ к списку гостей для всех админов
+    if update.effective_user.id in ADMINS:
+        text = "📋 Список гостей:\n" + "\n".join(guests.values()) if guests else "Пока никто не ответил"
         await update.message.reply_text(text)
 
 def main():
