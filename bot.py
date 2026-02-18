@@ -32,7 +32,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # 🔥 1. Отправляем картинку
     await update.message.reply_photo(
-        photo="https://i.imgur.com/0V8p6dC.jpeg"  # ← твоя картинка из Imgur
+        photo="https://i.ibb.co/1fwZTB8R/IMG-0646.jpg"
     )
 
     # 🔥 2. Отправляем текст + кнопки
